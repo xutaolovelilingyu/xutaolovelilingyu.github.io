@@ -1,3 +1,15 @@
+:root {
+    --bg: #05070d;
+    --text-main: #eff3ff;
+    --text-dim: rgba(239, 243, 255, 0.68);
+    --line: rgba(239, 243, 255, 0.22);
+    --accent-a: #8ab4ff;
+    --accent-b: #ff9acb;
+    --gold: #d7c289;
+    --gold-dim: rgba(215, 194, 137, 0.7);
+    --cert-bg: rgba(7, 12, 24, 0.92);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -5,10 +17,44 @@
 }
 
 body {
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    background: #000;
-    color: #f5f5f5;
+    font-family: "Manrope", "Helvetica Neue", Arial, sans-serif;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(138, 180, 255, 0.08), transparent 35%),
+        radial-gradient(circle at 80% 15%, rgba(255, 154, 203, 0.08), transparent 30%),
+        var(--bg);
+    color: var(--text-main);
     overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+}
+
+#lang-switcher {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 30;
+    display: inline-flex;
+    gap: 8px;
+    padding: 6px;
+    border: 1px solid rgba(239, 243, 255, 0.2);
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    background: rgba(7, 12, 24, 0.45);
+}
+
+.lang-btn {
+    border: 0;
+    border-radius: 999px;
+    padding: 6px 10px;
+    background: transparent;
+    color: var(--text-dim);
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.lang-btn.active {
+    background: rgba(239, 243, 255, 0.14);
+    color: var(--text-main);
 }
 
 /* 星空 canvas */
@@ -19,6 +65,7 @@ body {
     width: 100%;
     height: 100%;
     z-index: -1;
+    pointer-events: none;
 }
 
 /* 每一幕 */
@@ -28,20 +75,28 @@ body {
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 40px;
+    padding: 48px 28px;
 }
 
 .content {
-    max-width: 700px;
+    max-width: 760px;
+}
+
+#scene-4,
+#scene-5 {
+    min-height: 90vh;
 }
 
 h1 {
-    font-size: 42px;
-    font-weight: 300;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 400;
+    letter-spacing: 0.01em;
 }
 
 h2 {
-    font-size: 28px;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: clamp(1.6rem, 3.2vw, 2.2rem);
     margin: 20px 0 10px;
     font-weight: 400;
 }
@@ -50,35 +105,57 @@ p {
     margin-bottom: 20px;
     line-height: 1.6;
     font-weight: 300;
+    color: var(--text-dim);
 }
 
 .small {
     font-size: 14px;
     letter-spacing: 2px;
     text-transform: uppercase;
-    opacity: 0.6;
+    color: var(--text-dim);
 }
 
 .caption {
-    opacity: 0.5;
+    color: var(--text-dim);
     margin-top: 30px;
     font-size: 14px;
+    letter-spacing: 0.03em;
 }
 
 .counter-placeholder {
-    margin-top: 40px;
+    margin-top: 44px;
     font-size: 18px;
 }
 
 #counter {
     margin-top: 10px;
-    font-size: 24px;
-    font-weight: 400;
+    font-size: clamp(1.1rem, 2.8vw, 1.6rem);
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--text-main);
+}
+
+.milestones {
+    margin-top: 34px;
+    border-top: 1px solid var(--line);
+    padding-top: 22px;
+}
+
+.milestones p {
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+}
+
+.milestones span {
+    display: inline-block;
+    min-width: 110px;
+    color: var(--text-main);
+    font-weight: 500;
 }
 
 .scene {
     opacity: 0;
-    transform: translateY(40px);
+    transform: translateY(30px);
     transition: opacity 1.2s ease, transform 1.2s ease;
 }
 
@@ -91,7 +168,9 @@ p {
     position: fixed;
     width: 100%;
     height: 100%;
-    background: #000;
+    background:
+        radial-gradient(circle at 50% 20%, rgba(138, 180, 255, 0.08), transparent 35%),
+        #000;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -104,9 +183,215 @@ p {
     opacity: 0.8;
     text-align: center;
     font-weight: 300;
+    line-height: 1.6;
 }
 
 #intro-overlay.fade-out {
     opacity: 0;
     pointer-events: none;
+}
+
+.final-line {
+    font-size: clamp(1.1rem, 2.8vw, 1.6rem);
+    color: var(--text-main);
+    margin-top: 24px;
+}
+
+#certificate {
+    margin: 32px auto 0;
+    width: min(760px, 100%);
+    text-align: left;
+    border: 1px solid rgba(215, 194, 137, 0.35);
+    background:
+        radial-gradient(circle at 80% 25%, rgba(215, 194, 137, 0.08), transparent 32%),
+        var(--cert-bg);
+    padding: 26px 24px;
+    border-radius: 14px;
+    position: relative;
+    overflow: hidden;
+}
+
+.cert-header {
+    border-bottom: 1px solid rgba(215, 194, 137, 0.26);
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+}
+
+.cert-header h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 1.45rem;
+    font-weight: 500;
+    color: var(--gold);
+}
+
+.cert-header p {
+    margin-top: 8px;
+    margin-bottom: 0;
+    color: var(--gold-dim);
+}
+
+.cert-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 24px;
+}
+
+.cert-grid dt {
+    font-size: 0.76rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+}
+
+.cert-grid dd {
+    margin: 0;
+    color: var(--text-main);
+    font-size: 1.05rem;
+}
+
+#seal {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    width: 118px;
+    height: 118px;
+    border: 2px solid rgba(215, 194, 137, 0.44);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(215, 194, 137, 0.72);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    transform: rotate(-12deg) scale(0.9);
+    opacity: 0.3;
+}
+
+#seal.stamped {
+    animation: stamp 520ms ease-out both;
+}
+
+@keyframes stamp {
+    0% {
+        transform: rotate(-12deg) scale(1.85);
+        opacity: 0;
+    }
+    50% {
+        transform: rotate(-12deg) scale(0.85);
+        opacity: 0.88;
+    }
+    100% {
+        transform: rotate(-12deg) scale(1);
+        opacity: 0.72;
+    }
+}
+
+#issue-certificate {
+    margin-top: 22px;
+    border: 1px solid rgba(215, 194, 137, 0.38);
+    background: rgba(9, 14, 27, 0.9);
+    color: var(--gold);
+    padding: 10px 16px;
+    border-radius: 999px;
+    font: inherit;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 200ms ease, transform 200ms ease;
+}
+
+#issue-certificate:hover {
+    background: rgba(20, 28, 48, 0.92);
+    transform: translateY(-1px);
+}
+
+#issue-certificate:active {
+    transform: translateY(1px);
+}
+
+.pulse {
+    position: fixed;
+    width: 14px;
+    height: 14px;
+    border: 1px solid rgba(239, 243, 255, 0.35);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 2;
+    transform: translate(-50%, -50%);
+    animation: pulse-wave 1.7s ease-out forwards;
+}
+
+@keyframes pulse-wave {
+    to {
+        width: 240px;
+        height: 240px;
+        opacity: 0;
+    }
+}
+
+.petal {
+    position: fixed;
+    width: 7px;
+    height: 11px;
+    background: rgba(255, 154, 203, 0.7);
+    border-radius: 70% 30% 70% 30%;
+    pointer-events: none;
+    z-index: 2;
+    filter: blur(0.2px);
+    animation: petal-fall 1.8s linear forwards;
+}
+
+@keyframes petal-fall {
+    to {
+        transform: translate(var(--drift-x), var(--drift-y)) rotate(var(--rot));
+        opacity: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    #lang-switcher {
+        top: 10px;
+        right: 10px;
+    }
+
+    .scene {
+        padding: 40px 20px;
+    }
+
+    .counter-placeholder {
+        font-size: 16px;
+    }
+
+    .milestones span {
+        min-width: 96px;
+    }
+
+    .cert-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    #seal {
+        width: 92px;
+        height: 92px;
+        font-size: 0.62rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scene {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    #intro-overlay {
+        transition: none;
+    }
+
+    #seal.stamped,
+    .pulse,
+    .petal {
+        animation: none;
+    }
 }
