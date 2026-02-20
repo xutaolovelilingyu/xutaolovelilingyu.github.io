@@ -1,50 +1,62 @@
-<!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>Our Love Story</title>
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-	<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
-	<link href="css/default.css" type="text/css" rel="stylesheet">
-	<script type="text/javascript" src="js/jquery.js"></script>
-	<script type="text/javascript" src="js/functions.js"></script>
+    <meta charset="UTF-8">
+    <title>Two Trajectories, One Orbit</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
-	<div id="mainDiv">
-		<div id="content">
-			<div id="code">
-				<span class="comments">你是我心中最美的风景</span><br />
-				<br /><span class="comments">每一天，因你而温柔</span><br />
-				<br /><span class="comments">时光悄悄流过指尖</span><br />
-				<br /><span class="comments">却带不走这份眷恋</span><br />
-				<br /><span class="comments">愿与你共赴四季轮回</span><br />
-				<br /><span class="comments">在岁月里慢慢变老</span><br />
-				<br /><span class="comments">我爱你，从今天到永远</span><br />
-			</div>
-			<div id="words">
-				<div id="messages">
-					与你相遇相爱，我们已经一起走过：
-					<div id="elapseClock"></div>
-				</div>
-				<div id="loveu">
-					永远爱你
-				</div>
-			</div>
-		</div>
-	</div>
-	<script type="text/javascript">
-		together = new Date(2016, 4, 30)
 
-		timeElapse(together);
-		setInterval(function () {
-			timeElapse(together);
-		}, 500);
+    <!-- 星空背景 -->
+    <canvas id="starfield"></canvas>
 
-		$("#code").typewriter();
+    <!-- 第一幕 -->
+    <section class="scene" id="scene-1">
+        <div class="content">
+            <p class="small">In the vastness of time,</p>
+            <h1>most stars travel alone.</h1>
+        </div>
+    </section>
 
-		setTimeout(function() {
-			showMessages();
-		}, 3000);
-	</script>
+    <!-- 第二幕 -->
+    <section class="scene" id="scene-2">
+        <div class="content">
+            <h2>1993.01.07</h2>
+            <p>A point of light enters the universe.</p>
+
+            <h2>1993.08.23</h2>
+            <p>Another begins its silent journey.</p>
+
+            <p class="caption">Two independent timelines.</p>
+        </div>
+    </section>
+
+    <!-- 第三幕 -->
+    <section class="scene" id="scene-3">
+        <div class="content">
+            <h2>2016.04.30</h2>
+            <p>Gravity begins.</p>
+
+            <div class="counter-placeholder">
+                We have been in orbit for
+                <div id="counter">Loading...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第四幕 -->
+    <section class="scene" id="scene-4">
+        <div class="content">
+            <h2>Still expanding.</h2>
+            <p class="final-line">
+                In a universe where most lights pass by unnoticed,
+                two stayed.
+            </p>
+        </div>
+    </section>
+
+    <script src="js/main.js"></script>
 </body>
 </html>
