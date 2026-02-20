@@ -4,50 +4,59 @@
     <meta charset="UTF-8">
     <title>Two Trajectories, One Orbit</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A poetic interactive timeline of two lives becoming one shared orbit.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <div id="lang-switcher" aria-label="Language switcher">
+        <button type="button" class="lang-btn active" data-lang="en">English</button>
+        <button type="button" class="lang-btn" data-lang="zh">中文</button>
+    </div>
+
     <div id="intro-overlay">
-        <div class="intro-text">
-            In the vastness of time,<br>
-            two points aligned.
-        </div>
+        <div class="intro-text" id="intro-text">In the vastness of time,<br>two points aligned.</div>
     </div>
 
     <!-- 星空背景 -->
-    <canvas id="starfield"></canvas>
+    <canvas id="starfield" aria-hidden="true"></canvas>
 
     <!-- 第一幕 -->
     <section class="scene" id="scene-1">
         <div class="content">
-            <p class="small">In the vastness of time,</p>
-            <h1>most stars travel alone.</h1>
+            <p class="small" id="s1-kicker">In the vastness of time,</p>
+            <h1 id="s1-title">most stars travel alone.</h1>
+            <div class="milestones">
+                <p><span>1993.01.07</span> <span id="s1-birth-1">A point of light enters the universe.</span></p>
+                <p><span>1993.08.23</span> <span id="s1-birth-2">Another begins its silent journey.</span></p>
+            </div>
         </div>
     </section>
 
     <!-- 第二幕 -->
     <section class="scene" id="scene-2">
         <div class="content">
-            <h2>1993.01.07</h2>
-            <p>A point of light enters the universe.</p>
-
-            <h2>1993.08.23</h2>
-            <p>Another begins its silent journey.</p>
-
-            <p class="caption">Two independent timelines.</p>
+            <h2>2016.04.30</h2>
+            <p class="small" id="s2-kicker">Gravity</p>
+            <p id="s2-body">How many chapters of the universe<br>must we pass through<br>before we arrive here?</p>
+            <p class="caption" id="s2-caption">Alignment is not certainty. It is a slight bend.</p>
         </div>
     </section>
 
     <!-- 第三幕 -->
     <section class="scene" id="scene-3">
         <div class="content">
-            <h2>2016.04.30</h2>
-            <p>Gravity begins.</p>
+            <h2 id="s3-date">2018.01.02</h2>
+            <p class="small" id="s3-kicker">Shared Orbit</p>
+            <p id="s3-body">Two trajectories.<br>One orbit.</p>
 
             <div class="counter-placeholder">
-                We have been in orbit for
-                <div id="counter">Loading...</div>
+                <span id="s3-counter-label">We have been in orbit for</span>
+                <div id="counter" role="status" aria-live="polite">Loading...</div>
             </div>
         </div>
     </section>
@@ -55,11 +64,45 @@
     <!-- 第四幕 -->
     <section class="scene" id="scene-4">
         <div class="content">
-            <h2>Still expanding.</h2>
-            <p class="final-line">
-                In a universe where most lights pass by unnoticed,
-                two stayed.
-            </p>
+            <h2 id="s4-title">Now.<br>Still here.</h2>
+            <p class="final-line" id="s4-body">A hundred-year river is nothing more than this moment.</p>
+            <p class="caption" id="s4-caption">This second exists only once.</p>
+        </div>
+    </section>
+
+    <!-- 第五幕 -->
+    <section class="scene" id="scene-5">
+        <div class="content">
+            <h2 id="s5-title">Certificate of This Moment</h2>
+            <p class="caption" id="s5-caption">Issued not for eternity, but for this breath in time.</p>
+
+            <article id="certificate" aria-label="Certificate of this moment">
+                <div class="cert-header">
+                    <h3 id="cert-title">Certificate of This Moment</h3>
+                    <p id="cert-subtitle">Issued for Toby &amp; Lily</p>
+                </div>
+                <dl class="cert-grid">
+                    <div>
+                        <dt id="cert-met-label">Met</dt>
+                        <dd>2016.04.30</dd>
+                    </div>
+                    <div>
+                        <dt id="cert-married-label">Married</dt>
+                        <dd id="cert-married-date">2018.01.02</dd>
+                    </div>
+                    <div>
+                        <dt id="cert-duration-label">Together For</dt>
+                        <dd id="cert-duration">Loading...</dd>
+                    </div>
+                    <div>
+                        <dt id="cert-issued-label">Issued At</dt>
+                        <dd id="cert-issued-at">Loading...</dd>
+                    </div>
+                </dl>
+                <div id="seal" aria-hidden="true">THIS MOMENT</div>
+            </article>
+
+            <button id="issue-certificate" type="button">Issue This Moment</button>
         </div>
     </section>
 
