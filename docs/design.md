@@ -25,5 +25,5 @@
 ## 3. 技术
 
 - 纯静态：`index.html` + `css/style.css` + `js/main.js`，无构建步骤，GitHub Pages 直接托管（`CNAME` → lilyli.org）。
-- 中英双语：默认跟随浏览器语言，右上角可切换并记住选择。
+- 仅中文呈现（人名 Toby & Lily 除外）。
 - 日期计算按日历日（不受夏令时影响），相识当天记为第 1 天。

@@ -5,203 +5,28 @@
     const MARRIED = { y: 2018, m: 1, d: 2 };
     const MET_DATE = new Date(MET.y, MET.m - 1, MET.d);
     const DAY_MS = 86400000;
-    const LANG_KEY = "love-lang";
 
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const i18n = {
-        zh: {
-            pageTitle: "Toby & Lily · 从那天起",
-            navMet: "初见",
-            navStory: "故事",
-            navTime: "时光",
-            navLetter: "情书",
-            navKeepsake: "纪念",
-            heroSvgTitle: "两条线相遇，成为一颗心",
-            heroSub: "从那天起，这个世界多了一个“我们”。",
-            heroDaysPre: "今天是我们相识的第",
-            heroDaysPost: "天",
-            scrollCue: "往下，看看我们的故事",
-            beforeEyebrow: "在遇见之前",
-            beforeTitle: "同一片天空下，两条各自的路",
-            beforeLead: "1993 年，有两个人在不同的季节来到这个世界。他们走着各自的路，还不知道彼此的名字。",
-            tobyNote: "出生在一个冬天",
-            lilyNote: "出生在夏天的尾巴上",
-            beforeFootnote: "相差七个多月，相隔不知多远——然后，过了二十三年。",
-            metEyebrow: "初见",
-            metWeekday: "四月的最后一天 · 星期六",
-            metTitle: "春天快要结束的时候，我们遇见了",
-            metBody1: "后来才明白，那不是春天的结束，而是我们的开始。",
-            metBody2: "那天之后，很多普通的日子都有了名字：第一次见面，第一次牵手，第一次说起“以后”。",
-            metQuote: "“我寻觅了一千年，也流过一千次泪。终于，我找到了你。”",
-            metQuoteCite: "—— 写在 2017 年的一封情书里",
-            storyEyebrow: "我们的故事",
-            storyTitle: "从两个人，到一个家",
-            tl1Title: "Toby 出生",
-            tl1Body: "冬天里，一个小小的人来到了世界上。",
-            tl2Title: "Lily 出生",
-            tl2Body: "夏末，另一个人也来了。故事的另一半，就位。",
-            tl3Title: "我们相识",
-            tl3Body: "两条路，在这一天交汇。",
-            tl4Title: "我们结婚了",
-            tl4Body: "新年的第二天，“我”和“你”，正式成了“我们”。",
-            tl5Title: "此刻",
-            tl5BodyPre: "仍在一起，仍然相爱。相识的第",
-            tl5BodyPost: "天。",
-            timeEyebrow: "一起走过的时光",
-            timeTitle: "从相识那天起，我们已经一起走了",
-            unitYears: "年",
-            unitMonths: "个月",
-            unitDays: "天",
-            unitHours: "小时",
-            unitMinutes: "分",
-            unitSeconds: "秒",
-            statMet: "相识的天数",
-            statMarried: "结婚的天数",
-            statAnniv: "一起过的相识纪念日",
-            statNext: (n) => `天后，第 ${n} 个相识纪念日`,
-            statNextToday: (n) => `第 ${n} 个相识纪念日`,
-            statToday: "今天",
-            timeNote: "时间一直在走，而我们一直在一起。",
-            letterEyebrow: "写给你",
-            letterTitle: "有一封信，一直想再给你读一遍",
-            letterOpen: "轻触打开",
-            letterGreeting: "亲爱的：",
-            letterL1: "爱上你，是我收到过最好的礼物。",
-            letterL2: "愿我们彼此照顾，",
-            letterL3: "无论遇见什么，",
-            letterL4: "直到生命的尽头。",
-            letterL5: "你是我生命里的光。",
-            letterL6: "我爱你。",
-            letterSign: "—— 你的灵魂伴侣",
-            keepEyebrow: "收藏此刻",
-            keepTitle: "把今天，也存进我们的回忆里",
-            keepLead: "每一天都会被记住。这张卡片记下的，是今天的我们。",
-            cardDayPre: "今天是我们相识的第",
-            cardDayPost: "天",
-            cardMet: "相识",
-            cardMarried: "结婚",
-            cardToday: "今天",
-            cardMotto: "余生很长，慢慢走。",
-            saveCard: "保存纪念卡",
-            footerSince: "相识于 2016.04.30",
-            langToggle: "EN",
-            langToggleLabel: "Switch to English"
-        },
-        en: {
-            pageTitle: "Toby & Lily · Since That Day",
-            navMet: "We Met",
-            navStory: "Story",
-            navTime: "Time",
-            navLetter: "Letter",
-            navKeepsake: "Keepsake",
-            heroSvgTitle: "Two lines meet and become one heart",
-            heroSub: "Since that day, the world has had an “us”.",
-            heroDaysPre: "Today is day",
-            heroDaysPost: "since we met",
-            scrollCue: "Scroll down for our story",
-            beforeEyebrow: "Before we met",
-            beforeTitle: "Under one sky, two separate roads",
-            beforeLead: "In 1993, two people arrived in different seasons. They walked their own roads, not yet knowing each other's names.",
-            tobyNote: "Born in the middle of winter",
-            lilyNote: "Born at the tail end of summer",
-            beforeFootnote: "Seven months apart in age, who knows how many miles apart — and then, twenty-three years went by.",
-            metEyebrow: "The day we met",
-            metWeekday: "The last day of April · a Saturday",
-            metTitle: "Spring was almost over when we met",
-            metBody1: "Only later did we understand: it wasn't the end of spring. It was the beginning of us.",
-            metBody2: "After that day, ordinary days started to have names — the first meeting, the first time holding hands, the first time we said “someday”.",
-            metQuote: "“I have searched a thousand years, and I have cried a thousand tears. Finally, I found you.”",
-            metQuoteCite: "— from a love note, 2017",
-            storyEyebrow: "Our story",
-            storyTitle: "From two people to one home",
-            tl1Title: "Toby is born",
-            tl1Body: "In winter, a small person arrives in the world.",
-            tl2Title: "Lily is born",
-            tl2Body: "At summer's end, the other half of the story arrives.",
-            tl3Title: "We meet",
-            tl3Body: "Two roads cross on this day.",
-            tl4Title: "We get married",
-            tl4Body: "On the second day of the new year, “you” and “me” officially became “us”.",
-            tl5Title: "Right now",
-            tl5BodyPre: "Still together, still in love. Day",
-            tl5BodyPost: "since we met.",
-            timeEyebrow: "Time together",
-            timeTitle: "Since the day we met, we have walked together for",
-            unitYears: "years",
-            unitMonths: "months",
-            unitDays: "days",
-            unitHours: "hours",
-            unitMinutes: "minutes",
-            unitSeconds: "seconds",
-            statMet: "days since we met",
-            statMarried: "days since our wedding",
-            statAnniv: "meeting anniversaries together",
-            statNext: (n) => `days until our ${ordinal(n)} anniversary of meeting`,
-            statNextToday: (n) => `our ${ordinal(n)} anniversary of meeting`,
-            statToday: "Today",
-            timeNote: "Time keeps moving, and we keep going — together.",
-            letterEyebrow: "For you",
-            letterTitle: "A letter I'd like to read to you again",
-            letterOpen: "Tap to open",
-            letterGreeting: "Darling,",
-            letterL1: "It is the best gift for me, falling in love with you.",
-            letterL2: "I wish we can take care of each other,",
-            letterL3: "no matter what we meet,",
-            letterL4: "till the end of life.",
-            letterL5: "You are the light of my life.",
-            letterL6: "I love you.",
-            letterSign: "— your soulmate",
-            keepEyebrow: "Keep this moment",
-            keepTitle: "Let today join our memories, too",
-            keepLead: "Every day deserves to be remembered. This card remembers us, today.",
-            cardDayPre: "Today is day",
-            cardDayPost: "since we met",
-            cardMet: "Met",
-            cardMarried: "Married",
-            cardToday: "Today",
-            cardMotto: "Life is long. Let's take it slow.",
-            saveCard: "Save the card",
-            footerSince: "Together since 2016.04.30",
-            langToggle: "中文",
-            langToggleLabel: "切换到中文"
-        }
+    const CARD = {
+        dayPre: "今天是我们相识的第",
+        dayPost: "天",
+        met: "相识",
+        married: "结婚",
+        today: "今天",
+        motto: "余生很长，慢慢走。"
     };
-
-    let lang = "zh";
-
-    function ordinal(n) {
-        const rem100 = n % 100;
-        if (rem100 >= 11 && rem100 <= 13) return `${n}th`;
-        return n + ({ 1: "st", 2: "nd", 3: "rd" }[n % 10] || "th");
-    }
 
     function pad(n) {
         return String(n).padStart(2, "0");
     }
 
     function formatNumber(n) {
-        return n.toLocaleString(lang === "zh" ? "zh-CN" : "en-US");
+        return n.toLocaleString("zh-CN");
     }
 
     function formatDot(date) {
         return `${date.getFullYear()}.${pad(date.getMonth() + 1)}.${pad(date.getDate())}`;
-    }
-
-    function storageGet(key) {
-        try {
-            return window.localStorage.getItem(key);
-        } catch (e) {
-            return null;
-        }
-    }
-
-    function storageSet(key, value) {
-        try {
-            window.localStorage.setItem(key, value);
-        } catch (e) {
-            /* storage unavailable: language just won't be remembered */
-        }
     }
 
     /* ---------- Dates ---------- */
@@ -269,7 +94,6 @@
     let lastDayKey = "";
 
     function renderDaily(now) {
-        const copy = i18n[lang];
         const dayMet = daysBetween(MET, now) + 1;
         const dayMarried = daysBetween(MARRIED, now) + 1;
         const anniv = anniversaryInfo(now);
@@ -288,11 +112,11 @@
         if (annivEl) annivEl.textContent = formatNumber(anniv.passed);
         if (next && nextLabel) {
             if (anniv.isToday) {
-                next.textContent = copy.statToday;
-                nextLabel.textContent = copy.statNextToday(anniv.nth);
+                next.textContent = "今天";
+                nextLabel.textContent = `第 ${anniv.nth} 个相识纪念日`;
             } else {
                 next.textContent = formatNumber(anniv.daysUntil);
-                nextLabel.textContent = copy.statNext(anniv.nth);
+                nextLabel.textContent = `天后，第 ${anniv.nth} 个相识纪念日`;
             }
         }
     }
@@ -314,39 +138,11 @@
             }
         }
 
-        const dayKey = `${lang}-${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+        const dayKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
         if (dayKey !== lastDayKey) {
             lastDayKey = dayKey;
             renderDaily(now);
         }
-    }
-
-    function applyLanguage(next) {
-        lang = next === "en" ? "en" : "zh";
-        const copy = i18n[lang];
-        document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
-        document.title = copy.pageTitle;
-
-        document.querySelectorAll("[data-i18n]").forEach((el) => {
-            const value = copy[el.dataset.i18n];
-            if (typeof value === "string") el.textContent = value;
-        });
-
-        const toggle = document.getElementById("lang-toggle");
-        if (toggle) {
-            toggle.textContent = copy.langToggle;
-            toggle.setAttribute("aria-label", copy.langToggleLabel);
-        }
-
-        lastDayKey = "";
-        tick();
-    }
-
-    function detectLanguage() {
-        const saved = storageGet(LANG_KEY);
-        if (saved === "zh" || saved === "en") return saved;
-        const langs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ""];
-        return langs.some((l) => /^zh/i.test(l)) ? "zh" : "en";
     }
 
     /* ---------- Ambient canvas: warm bokeh + drifting hearts ---------- */
@@ -513,16 +309,6 @@
         });
     }
 
-    function setupLangToggle() {
-        const toggle = document.getElementById("lang-toggle");
-        if (!toggle) return;
-        toggle.addEventListener("click", () => {
-            const next = lang === "zh" ? "en" : "zh";
-            applyLanguage(next);
-            storageSet(LANG_KEY, next);
-        });
-    }
-
     /* ---------- Keepsake card export ---------- */
 
     function roundRect(ctx, x, y, w, h, r) {
@@ -551,18 +337,16 @@
     }
 
     async function exportCard() {
-        const copy = i18n[lang];
         const now = new Date();
         const dayMet = formatNumber(daysBetween(MET, now) + 1);
-        const isZh = lang === "zh";
-        const body = isZh ? "'Noto Serif SC', serif" : "'Cormorant Garamond', 'Noto Serif SC', serif";
+        const body = "'Noto Serif SC', serif";
         const display = "'Cormorant Garamond', 'Noto Serif SC', serif";
 
         if (document.fonts && document.fonts.load) {
             try {
                 await Promise.all([
                     document.fonts.load(`500 120px ${display}`, "Toby & Lily 0123456789."),
-                    document.fonts.load(`400 40px ${body}`, copy.cardDayPre + copy.cardDayPost + copy.cardMotto + copy.cardMet + copy.cardMarried + copy.cardToday)
+                    document.fonts.load(`400 40px ${body}`, CARD.dayPre + CARD.dayPost + CARD.motto + CARD.met + CARD.married + CARD.today)
                 ]);
             } catch (e) {
                 /* fall back to whatever fonts are available */
@@ -620,16 +404,16 @@
         ctx.fillText("Toby & Lily", W / 2, 470);
 
         ctx.fillStyle = "#7d5d55";
-        ctx.font = `400 ${isZh ? 40 : 46}px ${body}`;
-        ctx.fillText(copy.cardDayPre, W / 2, 590);
+        ctx.font = `400 40px ${body}`;
+        ctx.fillText(CARD.dayPre, W / 2, 590);
 
         ctx.fillStyle = "#b2474e";
         ctx.font = `600 150px ${display}`;
         ctx.fillText(dayMet, W / 2, 740);
 
         ctx.fillStyle = "#7d5d55";
-        ctx.font = `400 ${isZh ? 40 : 46}px ${body}`;
-        ctx.fillText(copy.cardDayPost, W / 2, 810);
+        ctx.font = `400 40px ${body}`;
+        ctx.fillText(CARD.dayPost, W / 2, 810);
 
         // dashed divider
         ctx.save();
@@ -643,15 +427,15 @@
         ctx.restore();
 
         const facts = [
-            [copy.cardMet, "2016.04.30"],
-            [copy.cardMarried, "2018.01.02"],
-            [copy.cardToday, formatDot(now)]
+            [CARD.met, "2016.04.30"],
+            [CARD.married, "2018.01.02"],
+            [CARD.today, formatDot(now)]
         ];
         const colW = (cw - 160) / 3;
         facts.forEach(([label, value], i) => {
             const x = cx + 80 + colW * i + colW / 2;
             ctx.fillStyle = "#a88c83";
-            ctx.font = `400 ${isZh ? 30 : 34}px ${body}`;
+            ctx.font = `400 30px ${body}`;
             ctx.fillText(label, x, 960);
             ctx.fillStyle = "#4a2f2a";
             ctx.font = `600 44px ${display}`;
@@ -659,8 +443,8 @@
         });
 
         ctx.fillStyle = "#7d5d55";
-        ctx.font = `${isZh ? "" : "italic "}400 ${isZh ? 36 : 44}px ${body}`;
-        ctx.fillText(copy.cardMotto, W / 2, 1120);
+        ctx.font = `400 36px ${body}`;
+        ctx.fillText(CARD.motto, W / 2, 1120);
 
         ctx.fillStyle = "#a88c83";
         ctx.font = `400 26px ${display}`;
@@ -692,8 +476,7 @@
     /* ---------- Init ---------- */
 
     function init() {
-        applyLanguage(detectLanguage());
-        setupLangToggle();
+        tick();
         setupTopbar();
         setupReveal();
         setupLetter();
