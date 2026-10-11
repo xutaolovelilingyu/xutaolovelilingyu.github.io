@@ -1,110 +1,288 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Two Trajectories, One Orbit</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A poetic interactive timeline of two lives becoming one shared orbit.">
+    <title>Toby &amp; Lily · 从那天起</title>
+    <meta name="description" content="Toby & Lily — 纪念我们相识于 2016 年 4 月 30 日。">
+    <meta name="theme-color" content="#fbf1e6">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 28C9 22 3 17.5 3 11.2 3 7.3 6 4.5 9.6 4.5c2.6 0 4.8 1.5 6.4 3.8 1.6-2.3 3.8-3.8 6.4-3.8C26 4.5 29 7.3 29 11.2 29 17.5 23 22 16 28Z' fill='%23d4656a'/%3E%3C/svg%3E">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div id="lang-switcher" aria-label="Language switcher">
-        <button type="button" class="lang-btn active" data-lang="en">English</button>
-        <button type="button" class="lang-btn" data-lang="zh">中文</button>
-    </div>
+    <canvas id="ambient" aria-hidden="true"></canvas>
 
-    <div id="intro-overlay">
-        <div class="intro-text" id="intro-text">In the vastness of time,<br>two points aligned.</div>
-    </div>
+    <header class="topbar" id="topbar">
+        <a class="brand" href="#top" aria-label="Toby & Lily">T<span class="brand-heart">♥</span>L</a>
+        <nav class="topnav" aria-label="Sections">
+            <a href="#met" data-i18n="navMet">初见</a>
+            <a href="#story" data-i18n="navStory">故事</a>
+            <a href="#time" data-i18n="navTime">时光</a>
+            <a href="#letter" data-i18n="navLetter">情书</a>
+            <a href="#keepsake" data-i18n="navKeepsake">纪念</a>
+        </nav>
+        <button type="button" class="lang-toggle" id="lang-toggle" aria-label="Switch language">EN</button>
+    </header>
 
-    <!-- 星空背景 -->
-    <canvas id="starfield" aria-hidden="true"></canvas>
+    <main>
+        <!-- Hero -->
+        <section class="hero" id="top">
+            <p class="hero-kicker">2016 · 04 · 30</p>
+            <h1 class="hero-title">Toby <span class="amp">&amp;</span> Lily</h1>
 
-    <!-- 第一幕 -->
-    <section class="scene" id="scene-1">
-        <div class="content">
-            <p class="small" id="s1-kicker">In the vastness of time,</p>
-            <h1 id="s1-title">most stars travel alone.</h1>
-            <div class="milestones">
-                <p><span>1993.01.07</span> <span id="s1-birth-1">A point of light enters the universe.</span></p>
-                <p><span>1993.08.23</span> <span id="s1-birth-2">Another begins its silent journey.</span></p>
-            </div>
-        </div>
-    </section>
+            <svg class="hero-lines" viewBox="0 0 600 250" role="img" aria-labelledby="hero-lines-title">
+                <title id="hero-lines-title" data-i18n="heroSvgTitle">两条线相遇，成为一颗心</title>
+                <defs>
+                    <linearGradient id="line-left" x1="0" x2="1">
+                        <stop offset="0" stop-color="#d9a77f" stop-opacity="0"/>
+                        <stop offset="0.35" stop-color="#c98a62"/>
+                        <stop offset="1" stop-color="#d4656a"/>
+                    </linearGradient>
+                    <linearGradient id="line-right" x1="1" x2="0">
+                        <stop offset="0" stop-color="#e7a7a0" stop-opacity="0"/>
+                        <stop offset="0.35" stop-color="#e08a86"/>
+                        <stop offset="1" stop-color="#d4656a"/>
+                    </linearGradient>
+                    <radialGradient id="heart-glow">
+                        <stop offset="0" stop-color="#f7c9b8" stop-opacity="0.9"/>
+                        <stop offset="1" stop-color="#f7c9b8" stop-opacity="0"/>
+                    </radialGradient>
+                </defs>
+                <circle class="heart-halo" cx="300" cy="135" r="120" fill="url(#heart-glow)"/>
+                <path class="heart-fill" d="M300 210C255 175 205 140 205 105C205 72 230 55 255 55C278 55 293 70 300 95C307 70 322 55 345 55C370 55 395 72 395 105C395 140 345 175 300 210Z"/>
+                <path class="heart-line heart-line-left" pathLength="1" stroke="url(#line-left)"
+                      d="M20 210C120 210 200 211 300 210C255 175 205 140 205 105C205 72 230 55 255 55C278 55 293 70 300 95"/>
+                <path class="heart-line heart-line-right" pathLength="1" stroke="url(#line-right)"
+                      d="M580 210C480 210 400 211 300 210C345 175 395 140 395 105C395 72 370 55 345 55C322 55 307 70 300 95"/>
+                <circle class="meet-spark" cx="300" cy="95" r="5"/>
+                <text class="line-name" x="34" y="238">Toby</text>
+                <text class="line-name" x="566" y="238" text-anchor="end">Lily</text>
+            </svg>
 
-    <!-- 第二幕 -->
-    <section class="scene" id="scene-2">
-        <div class="content">
-            <h2>2016.04.30</h2>
-            <p class="small" id="s2-kicker">Gravity</p>
-            <p id="s2-body">How many chapters of the universe<br>must we pass through<br>before we arrive here?</p>
-            <p class="caption" id="s2-caption">Alignment is not certainty. It is a slight bend.</p>
-        </div>
-    </section>
+            <p class="hero-sub" data-i18n="heroSub">从那天起，这个世界多了一个“我们”。</p>
+            <p class="hero-days">
+                <span data-i18n="heroDaysPre">今天是我们相识的第</span>
+                <strong class="js-day-met">—</strong>
+                <span data-i18n="heroDaysPost">天</span>
+            </p>
+            <a class="scroll-cue" href="#before">
+                <span data-i18n="scrollCue">往下，看看我们的故事</span>
+                <span class="scroll-cue-arrow" aria-hidden="true"></span>
+            </a>
+        </section>
 
-    <!-- 第三幕 -->
-    <section class="scene" id="scene-3">
-        <div class="content">
-            <h2 id="s3-date">2018.01.02</h2>
-            <p class="small" id="s3-kicker">Shared Orbit</p>
-            <p id="s3-body">Two trajectories.<br>One orbit.</p>
+        <!-- Before -->
+        <section class="section before" id="before">
+            <div class="container">
+                <p class="eyebrow reveal" data-i18n="beforeEyebrow">在遇见之前</p>
+                <h2 class="section-title reveal" data-i18n="beforeTitle">同一片天空下，两条各自的路</h2>
+                <p class="section-lead reveal" data-i18n="beforeLead">1993 年，有两个人在不同的季节来到这个世界。他们走着各自的路，还不知道彼此的名字。</p>
 
-            <div class="counter-placeholder">
-                <span id="s3-counter-label">We have been in orbit for</span>
-                <div id="counter" role="status" aria-live="polite">Loading...</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 第四幕 -->
-    <section class="scene" id="scene-4">
-        <div class="content">
-            <h2 id="s4-title">Now.<br>Still here.</h2>
-            <p class="final-line" id="s4-body">A hundred-year river is nothing more than this moment.</p>
-            <p class="caption" id="s4-caption">This second exists only once.</p>
-        </div>
-    </section>
-
-    <!-- 第五幕 -->
-    <section class="scene" id="scene-5">
-        <div class="content">
-            <h2 id="s5-title">Certificate of This Moment</h2>
-            <p class="caption" id="s5-caption">Issued not for eternity, but for this breath in time.</p>
-
-            <article id="certificate" aria-label="Certificate of this moment">
-                <div class="cert-header">
-                    <h3 id="cert-title">Certificate of This Moment</h3>
-                    <p id="cert-subtitle">Issued for Toby &amp; Lily</p>
+                <div class="people">
+                    <article class="person reveal">
+                        <div class="person-season" aria-hidden="true">❄</div>
+                        <p class="person-name">Toby</p>
+                        <p class="person-date">1993.01.07</p>
+                        <p class="person-note" data-i18n="tobyNote">出生在一个冬天</p>
+                    </article>
+                    <div class="people-between reveal" aria-hidden="true">
+                        <span class="dash"></span>
+                        <span class="between-heart">♥</span>
+                        <span class="dash"></span>
+                    </div>
+                    <article class="person reveal">
+                        <div class="person-season" aria-hidden="true">☀</div>
+                        <p class="person-name">Lily</p>
+                        <p class="person-date">1993.08.23</p>
+                        <p class="person-note" data-i18n="lilyNote">出生在夏天的尾巴上</p>
+                    </article>
                 </div>
-                <dl class="cert-grid">
-                    <div>
-                        <dt id="cert-met-label">Met</dt>
-                        <dd>2016.04.30</dd>
-                    </div>
-                    <div>
-                        <dt id="cert-married-label">Married</dt>
-                        <dd id="cert-married-date">2018.01.02</dd>
-                    </div>
-                    <div>
-                        <dt id="cert-duration-label">Together For</dt>
-                        <dd id="cert-duration">Loading...</dd>
-                    </div>
-                    <div>
-                        <dt id="cert-issued-label">Issued At</dt>
-                        <dd id="cert-issued-at">Loading...</dd>
-                    </div>
-                </dl>
-                <div id="seal" aria-hidden="true">THIS MOMENT</div>
-            </article>
+                <p class="before-footnote reveal" data-i18n="beforeFootnote">相差七个多月，相隔不知多远——然后，过了二十三年。</p>
+            </div>
+        </section>
 
-            <button id="issue-certificate" type="button">Issue This Moment</button>
-        </div>
-    </section>
+        <!-- The day we met -->
+        <section class="section met" id="met">
+            <div class="container met-grid">
+                <div class="met-date reveal">
+                    <p class="eyebrow" data-i18n="metEyebrow">初见</p>
+                    <p class="met-big"><span>2016</span><span>04.30</span></p>
+                    <p class="met-weekday" data-i18n="metWeekday">四月的最后一天 · 星期六</p>
+                </div>
+                <div class="met-text reveal">
+                    <h2 class="section-title" data-i18n="metTitle">春天快要结束的时候，我们遇见了</h2>
+                    <p data-i18n="metBody1">后来才明白，那不是春天的结束，而是我们的开始。</p>
+                    <p data-i18n="metBody2">那天之后，很多普通的日子都有了名字：第一次见面，第一次牵手，第一次说起“以后”。</p>
+                    <blockquote class="met-quote">
+                        <p data-i18n="metQuote">“我寻觅了一千年，也流过一千次泪。终于，我找到了你。”</p>
+                        <cite data-i18n="metQuoteCite">—— 写在 2017 年的一封情书里</cite>
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- Story timeline -->
+        <section class="section story" id="story">
+            <div class="container">
+                <p class="eyebrow reveal" data-i18n="storyEyebrow">我们的故事</p>
+                <h2 class="section-title reveal" data-i18n="storyTitle">从两个人，到一个家</h2>
+
+                <ol class="timeline">
+                    <li class="moment reveal">
+                        <span class="moment-dot" aria-hidden="true"></span>
+                        <div class="moment-card">
+                            <time datetime="1993-01-07">1993.01.07</time>
+                            <h3 data-i18n="tl1Title">Toby 出生</h3>
+                            <p data-i18n="tl1Body">冬天里，一个小小的人来到了世界上。</p>
+                        </div>
+                    </li>
+                    <li class="moment reveal">
+                        <span class="moment-dot" aria-hidden="true"></span>
+                        <div class="moment-card">
+                            <time datetime="1993-08-23">1993.08.23</time>
+                            <h3 data-i18n="tl2Title">Lily 出生</h3>
+                            <p data-i18n="tl2Body">夏末，另一个人也来了。故事的另一半，就位。</p>
+                        </div>
+                    </li>
+                    <li class="moment moment-key reveal">
+                        <span class="moment-dot" aria-hidden="true"></span>
+                        <div class="moment-card">
+                            <time datetime="2016-04-30">2016.04.30</time>
+                            <h3 data-i18n="tl3Title">我们相识</h3>
+                            <p data-i18n="tl3Body">两条路，在这一天交汇。</p>
+                        </div>
+                    </li>
+                    <li class="moment moment-key reveal">
+                        <span class="moment-dot" aria-hidden="true"></span>
+                        <div class="moment-card">
+                            <time datetime="2018-01-02">2018.01.02</time>
+                            <h3 data-i18n="tl4Title">我们结婚了</h3>
+                            <p data-i18n="tl4Body">新年的第二天，“我”和“你”，正式成了“我们”。</p>
+                        </div>
+                    </li>
+                    <li class="moment moment-now reveal">
+                        <span class="moment-dot" aria-hidden="true"></span>
+                        <div class="moment-card">
+                            <time class="js-today"></time>
+                            <h3 data-i18n="tl5Title">此刻</h3>
+                            <p>
+                                <span data-i18n="tl5BodyPre">仍在一起，仍然相爱。相识的第</span>
+                                <strong class="js-day-met">—</strong>
+                                <span data-i18n="tl5BodyPost">天。</span>
+                            </p>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Time together -->
+        <section class="section time" id="time">
+            <div class="container">
+                <p class="eyebrow reveal" data-i18n="timeEyebrow">一起走过的时光</p>
+                <h2 class="section-title reveal" data-i18n="timeTitle">从相识那天起，我们已经一起走了</h2>
+
+                <div class="clock reveal" role="timer" aria-live="off">
+                    <div class="clock-unit"><span class="clock-num" id="c-years">0</span><span class="clock-label" data-i18n="unitYears">年</span></div>
+                    <div class="clock-unit"><span class="clock-num" id="c-months">0</span><span class="clock-label" data-i18n="unitMonths">个月</span></div>
+                    <div class="clock-unit"><span class="clock-num" id="c-days">0</span><span class="clock-label" data-i18n="unitDays">天</span></div>
+                    <div class="clock-unit"><span class="clock-num" id="c-hours">00</span><span class="clock-label" data-i18n="unitHours">小时</span></div>
+                    <div class="clock-unit"><span class="clock-num" id="c-minutes">00</span><span class="clock-label" data-i18n="unitMinutes">分</span></div>
+                    <div class="clock-unit"><span class="clock-num clock-sec" id="c-seconds">00</span><span class="clock-label" data-i18n="unitSeconds">秒</span></div>
+                </div>
+
+                <div class="stats">
+                    <div class="stat reveal">
+                        <span class="stat-num js-day-met">—</span>
+                        <span class="stat-label" data-i18n="statMet">相识的天数</span>
+                    </div>
+                    <div class="stat reveal">
+                        <span class="stat-num" id="stat-married">—</span>
+                        <span class="stat-label" data-i18n="statMarried">结婚的天数</span>
+                    </div>
+                    <div class="stat reveal">
+                        <span class="stat-num" id="stat-anniv">—</span>
+                        <span class="stat-label" data-i18n="statAnniv">一起过的相识纪念日</span>
+                    </div>
+                    <div class="stat reveal">
+                        <span class="stat-num" id="stat-next">—</span>
+                        <span class="stat-label" id="stat-next-label">—</span>
+                    </div>
+                </div>
+                <p class="time-note reveal" data-i18n="timeNote">时间一直在走，而我们一直在一起。</p>
+            </div>
+        </section>
+
+        <!-- Letter -->
+        <section class="section letter-section" id="letter">
+            <div class="container">
+                <p class="eyebrow reveal" data-i18n="letterEyebrow">写给你</p>
+                <h2 class="section-title reveal" data-i18n="letterTitle">有一封信，一直想再给你读一遍</h2>
+
+                <div class="letter-stage reveal" id="letter-stage">
+                    <button type="button" class="envelope" id="envelope" aria-expanded="false" aria-controls="letter-paper">
+                        <span class="envelope-back" aria-hidden="true"></span>
+                        <span class="envelope-flap" aria-hidden="true"></span>
+                        <span class="envelope-front" aria-hidden="true"></span>
+                        <span class="envelope-seal" aria-hidden="true">♥</span>
+                        <span class="envelope-to">To Lily</span>
+                        <span class="envelope-hint" data-i18n="letterOpen">轻触打开</span>
+                    </button>
+
+                    <article class="letter-paper" id="letter-paper" hidden>
+                        <p class="letter-greeting" data-i18n="letterGreeting">亲爱的：</p>
+                        <p data-i18n="letterL1">爱上你，是我收到过最好的礼物。</p>
+                        <p data-i18n="letterL2">愿我们彼此照顾，</p>
+                        <p data-i18n="letterL3">无论遇见什么，</p>
+                        <p data-i18n="letterL4">直到生命的尽头。</p>
+                        <p class="letter-gap" data-i18n="letterL5">你是我生命里的光。</p>
+                        <p data-i18n="letterL6">我爱你。</p>
+                        <p class="letter-sign" data-i18n="letterSign">—— 你的灵魂伴侣</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Keepsake -->
+        <section class="section keepsake" id="keepsake">
+            <div class="container">
+                <p class="eyebrow reveal" data-i18n="keepEyebrow">收藏此刻</p>
+                <h2 class="section-title reveal" data-i18n="keepTitle">把今天，也存进我们的回忆里</h2>
+                <p class="section-lead reveal" data-i18n="keepLead">每一天都会被记住。这张卡片记下的，是今天的我们。</p>
+
+                <figure class="card reveal" id="keepsake-card">
+                    <div class="card-inner">
+                        <p class="card-heart" aria-hidden="true">♥</p>
+                        <p class="card-names">Toby &amp; Lily</p>
+                        <p class="card-line">
+                            <span data-i18n="cardDayPre">今天是我们相识的第</span>
+                            <strong class="js-day-met">—</strong>
+                            <span data-i18n="cardDayPost">天</span>
+                        </p>
+                        <dl class="card-facts">
+                            <div><dt data-i18n="cardMet">相识</dt><dd>2016.04.30</dd></div>
+                            <div><dt data-i18n="cardMarried">结婚</dt><dd>2018.01.02</dd></div>
+                            <div><dt data-i18n="cardToday">今天</dt><dd class="js-today"></dd></div>
+                        </dl>
+                        <p class="card-motto" data-i18n="cardMotto">余生很长，慢慢走。</p>
+                    </div>
+                </figure>
+                <div class="keepsake-actions reveal">
+                    <button type="button" class="btn" id="save-card" data-i18n="saveCard">保存纪念卡</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p class="footer-names">Toby <span class="brand-heart">♥</span> Lily</p>
+        <p class="footer-meta"><span data-i18n="footerSince">相识于 2016.04.30</span> · lilyli.org</p>
+    </footer>
 
     <script src="js/main.js"></script>
 </body>
