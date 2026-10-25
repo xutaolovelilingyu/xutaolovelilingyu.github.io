@@ -42,7 +42,7 @@
             particle: "leaf",
             particleColors: ["128, 168, 90", "160, 192, 110", "104, 148, 78"],
             bokeh: ["227, 234, 210", "215, 226, 189", "240, 242, 220"],
-            colors: { cream: "#f4f5ea", paper: "#fdfdf6", blush: "#e3ead2", peach: "#d7e2bd", rose: "#6f9a4e", roseDeep: "#4a7232", amber: "#b7b07a", gold: "#a39a5a" }
+            colors: { cream: "#f4f5ea", paper: "#fdfdf6", blush: "#e3ead2", peach: "#d7e2bd", rose: "#5f8a3c", roseDeep: "#4a7232", amber: "#b7b07a", gold: "#a39a5a" }
         },
         4: {
             name: "四月 · 樱花",
@@ -132,6 +132,8 @@
     });
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.content = colors.cream;
+    const icon = document.querySelector('link[rel="icon"]');
+    if (icon) icon.setAttribute("href", icon.getAttribute("href").replace(/fill='[^']*'/, `fill='${encodeURIComponent(colors.rose)}'`));
 
     window.THEME = Object.assign({ month }, theme, { colors });
 })();

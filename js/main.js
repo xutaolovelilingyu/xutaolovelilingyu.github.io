@@ -150,7 +150,7 @@
 
     function setupAmbient() {
         const canvas = document.getElementById("ambient");
-        if (!canvas || prefersReducedMotion) return;
+        if (!canvas || !THEME || prefersReducedMotion) return;
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
@@ -394,7 +394,12 @@
         const dayMet = formatNumber(daysBetween(MET, now) + 1);
         const body = "'Noto Serif SC', serif";
         const display = "'Cormorant Garamond', 'Noto Serif SC', serif";
-        const c = THEME.colors;
+        // Read the live CSS variables so the card matches the page even if themes.js failed to load.
+        const rootStyle = getComputedStyle(document.documentElement);
+        const c = {};
+        ["blush", "peach", "paper", "gold", "rose", "roseDeep", "ink", "inkSoft", "inkFaint"].forEach((key) => {
+            c[key] = rootStyle.getPropertyValue(`--${key.replace(/[A-Z]/g, (ch) => `-${ch.toLowerCase()}`)}`).trim();
+        });
 
         if (document.fonts && document.fonts.load) {
             try {
@@ -423,10 +428,10 @@
         ctx.fillRect(0, 0, W, H);
 
         // soft glows
-        [[180, 200, 420, "255,248,240"], [900, 1150, 480, "255,240,234"]].forEach(([x, y, r, c]) => {
+        [[180, 200, 420], [900, 1150, 480]].forEach(([x, y, r]) => {
             const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-            g.addColorStop(0, `rgba(${c},0.75)`);
-            g.addColorStop(1, `rgba(${c},0)`);
+            g.addColorStop(0, withAlpha(c.paper, 0.75));
+            g.addColorStop(1, withAlpha(c.paper, 0));
             ctx.fillStyle = g;
             ctx.fillRect(0, 0, W, H);
         });
@@ -528,6 +533,10 @@
     }
 
     function applyThemeCopy() {
+        if (!THEME) {
+            document.querySelectorAll(".footer-theme").forEach((el) => el.remove());
+            return;
+        }
         setAll(".js-theme-name", THEME.name);
         setAll(".js-theme-mood", THEME.mood);
         if (THEME.hero) setAll(".hero-sub", THEME.hero);
