@@ -302,7 +302,7 @@
     function setupClickHearts() {
         document.addEventListener("click", (event) => {
             const target = event.target;
-            if (target instanceof Element && target.closest("a, button, input, textarea, .letter-paper")) return;
+            if (target instanceof Element && target.closest("a, button, input, textarea")) return;
             spawnHearts(event.clientX, event.clientY);
         });
     }
@@ -332,28 +332,6 @@
             { threshold: 0.15, rootMargin: "0px 0px -6% 0px" }
         );
         items.forEach((el) => observer.observe(el));
-    }
-
-    function setupLetter() {
-        const envelope = document.getElementById("envelope");
-        const paper = document.getElementById("letter-paper");
-        if (!envelope || !paper) return;
-
-        envelope.addEventListener("click", () => {
-            envelope.setAttribute("aria-expanded", "true");
-            const reveal = () => {
-                envelope.hidden = true;
-                paper.hidden = false;
-                const rect = paper.getBoundingClientRect();
-                spawnHearts(rect.left + rect.width / 2, rect.top + 20);
-            };
-            if (prefersReducedMotion) {
-                reveal();
-                return;
-            }
-            envelope.classList.add("opening");
-            window.setTimeout(reveal, 750);
-        });
     }
 
     /* ---------- Keepsake card export ---------- */
@@ -549,7 +527,6 @@
         tick();
         setupTopbar();
         setupReveal();
-        setupLetter();
         setupKeepsake();
         setupClickHearts();
         setupAmbient();
