@@ -7,6 +7,7 @@
     const DAY_MS = 86400000;
 
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const THEME = window.THEME;
 
     const CARD = {
         dayPre: "今天是我们相识的第",
@@ -145,31 +146,40 @@
         }
     }
 
-    /* ---------- Ambient canvas: warm bokeh + drifting hearts ---------- */
+    /* ---------- Ambient canvas: bokeh + this month's particle (hearts rise; snow, petals, leaves fall) ---------- */
 
     function setupAmbient() {
         const canvas = document.getElementById("ambient");
-        if (!canvas || prefersReducedMotion) return;
+        if (!canvas || !THEME || prefersReducedMotion) return;
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
-        const colors = ["255, 214, 186", "246, 190, 176", "255, 228, 196", "236, 160, 150"];
+        const kind = THEME.particle;
+        const falls = kind !== "heart";
         let width = 0;
         let height = 0;
         let particles = [];
 
+        function pick(list) {
+            return list[Math.floor(Math.random() * list.length)];
+        }
+
         function makeParticle(randomY) {
-            const isHeart = Math.random() < 0.28;
+            const accent = Math.random() < (falls ? 0.45 : 0.28);
+            const r = accent ? ({ snow: 2 + Math.random() * 3, leaf: 7 + Math.random() * 7 }[kind] || 5 + Math.random() * 6) : 14 + Math.random() * 46;
+            const fromEdge = falls && accent ? -r * 2 - 10 : height + 30;
             return {
                 x: Math.random() * width,
-                y: randomY ? Math.random() * height : height + 30,
-                r: isHeart ? 5 + Math.random() * 6 : 14 + Math.random() * 46,
-                alpha: isHeart ? 0.16 + Math.random() * 0.18 : 0.12 + Math.random() * 0.2,
-                speed: 0.12 + Math.random() * 0.32,
+                y: randomY ? Math.random() * height : fromEdge,
+                r,
+                alpha: accent ? (falls ? 0.4 + Math.random() * 0.35 : 0.16 + Math.random() * 0.18) : 0.12 + Math.random() * 0.2,
+                speed: (0.12 + Math.random() * 0.32) * (falls && accent ? -1.6 : 1),
                 sway: Math.random() * Math.PI * 2,
                 swaySpeed: 0.004 + Math.random() * 0.008,
-                color: colors[Math.floor(Math.random() * colors.length)],
-                heart: isHeart
+                angle: Math.random() * Math.PI * 2,
+                spin: (Math.random() - 0.5) * 0.03,
+                color: pick(accent ? THEME.particleColors : THEME.bokeh),
+                accent
             };
         }
 
@@ -199,16 +209,53 @@
             ctx.restore();
         }
 
+        // Almond shape: wide for petals, narrow with a midrib for leaves.
+        function drawBlade(x, y, size, angle, color, alpha, leaf) {
+            const w = size * (leaf ? 0.6 : 0.8);
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(angle);
+            ctx.beginPath();
+            ctx.moveTo(0, -size);
+            ctx.quadraticCurveTo(w, 0, 0, size);
+            ctx.quadraticCurveTo(-w, 0, 0, -size);
+            ctx.fillStyle = `rgba(${color}, ${alpha})`;
+            ctx.fill();
+            if (leaf) {
+                ctx.beginPath();
+                ctx.moveTo(0, -size * 0.8);
+                ctx.lineTo(0, size * 1.25);
+                ctx.strokeStyle = `rgba(${color}, ${Math.min(1, alpha + 0.2)})`;
+                ctx.lineWidth = 0.8;
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
+
+        function drawAccent(p, x) {
+            if (kind === "heart") {
+                drawHeart(x, p.y, p.r * 2, p.color, p.alpha);
+            } else if (kind === "snow") {
+                ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
+                ctx.beginPath();
+                ctx.arc(x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fill();
+            } else {
+                drawBlade(x, p.y, p.r, p.angle, p.color, p.alpha, kind === "leaf");
+            }
+        }
+
         function frame() {
             ctx.clearRect(0, 0, width, height);
             for (let i = 0; i < particles.length; i += 1) {
                 const p = particles[i];
                 p.y -= p.speed;
                 p.sway += p.swaySpeed;
+                p.angle += p.spin;
                 const x = p.x + Math.sin(p.sway) * 18;
 
-                if (p.heart) {
-                    drawHeart(x, p.y, p.r * 2, "212, 101, 106", p.alpha);
+                if (p.accent) {
+                    drawAccent(p, x);
                 } else {
                     const g = ctx.createRadialGradient(x, p.y, 0, x, p.y, p.r);
                     g.addColorStop(0, `rgba(${p.color}, ${p.alpha})`);
@@ -219,7 +266,7 @@
                     ctx.fill();
                 }
 
-                if (p.y < -p.r * 2 - 20) particles[i] = makeParticle(false);
+                if (p.y < -p.r * 2 - 20 || p.y > height + p.r * 2 + 40) particles[i] = makeParticle(false);
             }
             window.requestAnimationFrame(frame);
         }
@@ -321,6 +368,12 @@
         ctx.closePath();
     }
 
+    // "#rrggbb" + alpha -> "rgba(r, g, b, a)" for canvas, which lacks color-mix().
+    function withAlpha(hex, alpha) {
+        const n = parseInt(hex.slice(1), 16);
+        return `rgba(${n >> 16}, ${(n >> 8) & 255}, ${n & 255}, ${alpha})`;
+    }
+
     function canvasHeart(ctx, x, y, size, color) {
         ctx.save();
         ctx.translate(x, y);
@@ -341,6 +394,12 @@
         const dayMet = formatNumber(daysBetween(MET, now) + 1);
         const body = "'Noto Serif SC', serif";
         const display = "'Cormorant Garamond', 'Noto Serif SC', serif";
+        // Read the live CSS variables so the card matches the page even if themes.js failed to load.
+        const rootStyle = getComputedStyle(document.documentElement);
+        const c = {};
+        ["blush", "peach", "paper", "gold", "rose", "roseDeep", "ink", "inkSoft", "inkFaint"].forEach((key) => {
+            c[key] = rootStyle.getPropertyValue(`--${key.replace(/[A-Z]/g, (ch) => `-${ch.toLowerCase()}`)}`).trim();
+        });
 
         if (document.fonts && document.fonts.load) {
             try {
@@ -362,17 +421,17 @@
         if (!ctx) return;
 
         const bg = ctx.createLinearGradient(0, 0, W, H);
-        bg.addColorStop(0, "#f7d9c6");
-        bg.addColorStop(0.55, "#f3c4b6");
-        bg.addColorStop(1, "#efb2ab");
+        bg.addColorStop(0, c.blush);
+        bg.addColorStop(0.55, c.peach);
+        bg.addColorStop(1, c.peach);
         ctx.fillStyle = bg;
         ctx.fillRect(0, 0, W, H);
 
         // soft glows
-        [[180, 200, 420, "255,236,220"], [900, 1150, 480, "255,224,214"]].forEach(([x, y, r, c]) => {
+        [[180, 200, 420], [900, 1150, 480]].forEach(([x, y, r]) => {
             const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-            g.addColorStop(0, `rgba(${c},0.75)`);
-            g.addColorStop(1, `rgba(${c},0)`);
+            g.addColorStop(0, withAlpha(c.paper, 0.75));
+            g.addColorStop(1, withAlpha(c.paper, 0));
             ctx.fillStyle = g;
             ctx.fillRect(0, 0, W, H);
         });
@@ -382,43 +441,43 @@
         const cw = W - 180;
         const ch = H - 220;
         ctx.save();
-        ctx.shadowColor = "rgba(122, 64, 50, 0.25)";
+        ctx.shadowColor = withAlpha(c.ink, 0.25);
         ctx.shadowBlur = 50;
         ctx.shadowOffsetY = 18;
         roundRect(ctx, cx, cy, cw, ch, 44);
-        ctx.fillStyle = "#fffaf3";
+        ctx.fillStyle = c.paper;
         ctx.fill();
         ctx.restore();
         roundRect(ctx, cx + 26, cy + 26, cw - 52, ch - 52, 30);
-        ctx.strokeStyle = "rgba(201, 154, 91, 0.55)";
+        ctx.strokeStyle = withAlpha(c.gold, 0.55);
         ctx.lineWidth = 2;
         ctx.stroke();
 
         ctx.textAlign = "center";
         ctx.textBaseline = "alphabetic";
 
-        canvasHeart(ctx, W / 2, 300, 84, "#d4656a");
+        canvasHeart(ctx, W / 2, 300, 84, c.rose);
 
-        ctx.fillStyle = "#4a2f2a";
+        ctx.fillStyle = c.ink;
         ctx.font = `500 112px ${display}`;
         ctx.fillText("Toby & Lily", W / 2, 470);
 
-        ctx.fillStyle = "#7d5d55";
+        ctx.fillStyle = c.inkSoft;
         ctx.font = `400 40px ${body}`;
         ctx.fillText(CARD.dayPre, W / 2, 590);
 
-        ctx.fillStyle = "#b2474e";
+        ctx.fillStyle = c.roseDeep;
         ctx.font = `600 150px ${display}`;
         ctx.fillText(dayMet, W / 2, 740);
 
-        ctx.fillStyle = "#7d5d55";
+        ctx.fillStyle = c.inkSoft;
         ctx.font = `400 40px ${body}`;
         ctx.fillText(CARD.dayPost, W / 2, 810);
 
         // dashed divider
         ctx.save();
         ctx.setLineDash([10, 10]);
-        ctx.strokeStyle = "rgba(201, 154, 91, 0.7)";
+        ctx.strokeStyle = withAlpha(c.gold, 0.7);
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(cx + 110, 880);
@@ -434,19 +493,19 @@
         const colW = (cw - 160) / 3;
         facts.forEach(([label, value], i) => {
             const x = cx + 80 + colW * i + colW / 2;
-            ctx.fillStyle = "#a88c83";
+            ctx.fillStyle = c.inkFaint;
             ctx.font = `400 30px ${body}`;
             ctx.fillText(label, x, 960);
-            ctx.fillStyle = "#4a2f2a";
+            ctx.fillStyle = c.ink;
             ctx.font = `600 44px ${display}`;
             ctx.fillText(value, x, 1018);
         });
 
-        ctx.fillStyle = "#7d5d55";
+        ctx.fillStyle = c.inkSoft;
         ctx.font = `400 36px ${body}`;
         ctx.fillText(CARD.motto, W / 2, 1120);
 
-        ctx.fillStyle = "#a88c83";
+        ctx.fillStyle = c.inkFaint;
         ctx.font = `400 26px ${display}`;
         ctx.fillText("lilyli.org", W / 2, 1180);
 
@@ -473,9 +532,20 @@
         });
     }
 
+    function applyThemeCopy() {
+        if (!THEME) {
+            document.querySelectorAll(".footer-theme").forEach((el) => el.remove());
+            return;
+        }
+        setAll(".js-theme-name", THEME.name);
+        setAll(".js-theme-mood", THEME.mood);
+        if (THEME.hero) setAll(".hero-sub", THEME.hero);
+    }
+
     /* ---------- Init ---------- */
 
     function init() {
+        applyThemeCopy();
         tick();
         setupTopbar();
         setupReveal();
